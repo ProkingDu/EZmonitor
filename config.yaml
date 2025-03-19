@@ -1,0 +1,4 @@
+log_dir: /path/to/log/directory
+ports: [80, 443]
+interface: -1  # -1 表示监控所有网卡
+interval: 5  # 保存记录的时间间隔（秒）
