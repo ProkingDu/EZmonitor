@@ -1,4 +1,16 @@
-log_dir: /path/to/log/directory
-ports: [80, 443]
-interface: -1  # -1 表示监控所有网卡
-interval: 5  # 保存记录的时间间隔（秒）
+monitors:
+  - interface: "eth0"
+    interval: 5
+    ports: [80, 443]
+  - interface: "lo"
+    interval: 10
+    ports: []
+
+writers:
+  path: "./"
+  format: "csv"  # 可选：csv, txt, log
+  interval_type: "day"  # 可选：week, day, hour
+
+observers:
+  enabled: true
+  cleanup_days: 30  # 清理30天前的文件
