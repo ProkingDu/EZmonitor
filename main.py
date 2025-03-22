@@ -10,7 +10,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def main():
-    # 解析命令行参数
     parser = argparse.ArgumentParser(description="Network Traffic Monitoring System")
     parser.add_argument('--config', type=str, required=True, help="Path to the config file")
     args = parser.parse_args()
@@ -18,16 +17,22 @@ def main():
     # 加载配置
     config_manager = ConfigManager(args.config)
     
+    # 获取系统配置
+    system_config = config_manager.get_system_config()
+    filter_internal_ip = system_config['filter_internal_ip']
+    filter_superfluous_ip = system_config['filter_superfluous_ip']
+
     # 创建监视器
     monitors_config = config_manager.get_monitors_config()
-    monitors = MonitorFactory.create_monitors_from_config(monitors_config)
+    monitors = MonitorFactory.create_monitors_from_config(monitors_config, filter_internal_ip)
     
     # 创建记录器
     writers_config = config_manager.get_writers_config()
     writer = TrafficWriter(
         path=writers_config['path'],
         format=writers_config['format'],
-        interval_type=writers_config['interval_type']
+        interval_type=writers_config['interval_type'],
+        filter_superfluous_ip=filter_superfluous_ip
     )
     
     # 创建观察器
@@ -51,7 +56,7 @@ def main():
                 if packets:
                     writer.write(packets)
                     monitor.clear_packets()
-            time.sleep(5)  # 每5秒检查一次
+            time.sleep(5)
             
     except KeyboardInterrupt:
         logger.info("Shutting down...")
