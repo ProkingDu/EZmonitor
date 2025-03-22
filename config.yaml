@@ -1,16 +1,21 @@
+system:
+  filter_internal_ip: true    # 是否过滤内部IP
+  filter_superfluous_ip: true # 是否合并重复IP
+
 monitors:
   - interface: "eth0"
-    interval: 5
-    ports: [80, 443]
+    interval: 1
+    ports: [80,443,22,2004]
   - interface: "lo"
-    interval: 10
+    interval: 5
     ports: []
 
 writers:
-  path: "./"
+  path: "./logs"
   format: "csv"  # 可选：csv, txt, log
-  interval_type: "day"  # 可选：week, day, hour
+  interval_type: "hour"  # 可选：week, day, hour
 
 observers:
-  enabled: true
-  cleanup_days: 30  # 清理30天前的文件
+  enabled: true  # 是否启用自动清理
+  target_directory: "./"   # 指定目录
+  cleanup_days: 1  # 清理30天前的文件
