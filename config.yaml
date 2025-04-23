@@ -1,21 +1,29 @@
 system:
-  filter_internal_ip: true    # 是否过滤内部IP
-  filter_superfluous_ip: true # 是否合并重复IP
+  filter_internal_ip: true  # 过滤内网IP
+  filter_superfluous_ip: true  # 过滤多余IP
+
+middleware:
+  type: "nginx"  # 中间件类型，默认nginx
+  config: "/www/server/nginx/conf/nginx.conf"  # 主配置文件路径
+  sites_dir: "/www/server/panel/vhost/nginx"  # 站点配置文件目录
+  logs_dir: "/www/wwwlogs"  # 日志目录
+  logrotate: true # 是否开启日志轮转
 
 monitors:
-  - interface: "eth0"
-    interval: 1
-    ports: [80,443,22,2004]
-  - interface: "lo"
-    interval: 5
-    ports: []
+#  - interface: "eth0"  # 网卡
+#    interval: 1  # 监控间隔
+#    ports: [9999]  # 监控端口
+#  - interface: "lo"
+#    interval: 5
+#    ports: []
 
 writers:
-  path: "./logs"
-  format: "csv"  # 可选：csv, txt, log
-  interval_type: "hour"  # 可选：week, day, hour
+  path: "./logs" # 记录文件目录
+  format: "csv" # csv txt log
+  interval_type: "hour" # hour day week
+  fake_img : true
 
 observers:
-  enabled: true  # 是否启用自动清理
-  target_directory: "./"   # 指定目录
-  cleanup_days: 1  # 清理30天前的文件
+  enabled: true
+  target_directory: "./"
+  cleanup_days: 1

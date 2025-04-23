@@ -36,6 +36,24 @@
 ---
 
 ## 使用方法
+### 初始化Nginx
+
+項目依賴Nginx整合網站日誌，需要执行初始化命令来进行Nginx的依赖注入。
+```bash
+python3 nginx_initializaiton.py --config config.yaml
+```
+
+如果此程序不起作用，则可以手动编辑NGINX的配置文件，在http块中添加（或修改）:
+```nginx
+'log_format custom \'$remote_addr|$remote_port|[$time_local]|$scheme://$http_host$request_uri|$status $body_bytes_sent|"$http_referer"|[UA]$http_user_agent[UA]|$server_addr|$server_port\''
+```
+
+同时修改需要监控的站点的网站*access_log*为：
+```bash
+access_log 你的日志文件地址 custom
+```
+
+完成配置之后即可运行程序。
 
 ### 运行程序
 1. 准备配置文件（例如 `config.yaml`），具体格式见下文。

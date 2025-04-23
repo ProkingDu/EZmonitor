@@ -1,4 +1,7 @@
 *.csv
 __pycache__
-logs/*
+logs/
 *.log
+.venv/
+.vscode/
+.idea/
